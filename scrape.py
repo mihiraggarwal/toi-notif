@@ -41,7 +41,6 @@ def videos(soup):
 def city(soup):
     return headlines(soup)
 
-
 def india(soup):
     script = soup.find_all('script')
     for i in range(2, len(script)):
@@ -87,7 +86,7 @@ def cricket(soup):
     
     return news
 
-def sport(soup):
+def sports(soup):
     return cricket(soup)
 
 def entertainment(soup):

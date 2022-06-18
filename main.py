@@ -44,12 +44,12 @@ def link(url):
     except:
         pass
 
-def notif(news):
+def notif(title, url):
     toaster.show_toast(
-        news[0], "Click to read more",
+        title, "Click to read more",
         duration = 5,
         threaded = True,
-        callback_on_click = lambda: link(news[1])
+        callback_on_click = lambda: link(url)
     )
 
 def prompt():
@@ -83,7 +83,7 @@ def prompt():
             except:
                 print('\nValue not supported\n')
 
-        print('\nChoices recorded! You will be notified of 5 articles from each of these headings per day.\n\n')
+        print('\nChoices recorded! You will be notified of the top 5 articles from each of these headings per day.\n\n')
 
         print('In intervals of how many minutes do you want your news? (max: 30)\n')
 
@@ -119,6 +119,13 @@ def main():
             
             for i in data['heads'].keys():
                 final.update(stories(i, data['heads'][i]))
+        
+        for i in final:
+            notif(i, final[i])
+            time.sleep(data['gap']*60)
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except:
+        print('Something went wrong')
