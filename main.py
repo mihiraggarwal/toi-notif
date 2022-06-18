@@ -6,8 +6,11 @@ import requests
 import webbrowser
 from win10toast_click import ToastNotifier
 
+from scrape import *
+
 PATH = "https://timesofindia.indiatimes.com/"
 toaster = ToastNotifier()
+final = {}
 banner = '''  
   __         .__                         __  .__  _____ 
 _/  |_  ____ |__|           ____   _____/  |_|__|/ ____\\
@@ -29,24 +32,11 @@ def sections():
 
     return web
 
-def stories(url):
+def stories(name, url):
     req = requests.get(url).text
     soup = bs4.BeautifulSoup(req, 'lxml')
-    script = soup.find_all('script')
-
-    for i in range(2, len(script)):
-        try:
-            if script[i]['type'] == 'application/ld+json':
-                dsto = script[i].text
-                dsto = json.loads(dsto)
-        except: continue
-
-    news = {}
-    for i in range(5):
-        ds = dsto['itemListElement']
-        news[ds[i]['name']] = ds[i]['url']
-
-    return news
+    var = '_'.join(name.replace('&', '').lower().strip().split())
+    return eval(var + '(soup)')
 
 def link(url):
     try:
@@ -93,7 +83,6 @@ def prompt():
             except:
                 print('\nValue not supported\n')
 
-        user['heads']['Headlines'] = PATH
         print('\nChoices recorded! You will be notified of 5 articles from each of these headings per day.\n\n')
 
         print('In intervals of how many minutes do you want your news? (max: 30)\n')
@@ -124,7 +113,12 @@ def main():
     except:
         prompt()
     finally:
-        pass
+        with open('user.json', 'r') as f:
+            data = json.load(f)
+            final.update(stories('headlines', PATH))
+            
+            for i in data['heads'].keys():
+                final.update(stories(i, data['heads'][i]))
 
 if __name__ == '__main__':
     main()
