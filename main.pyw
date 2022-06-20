@@ -1,14 +1,14 @@
+import os
 import bs4
 import lxml
 import time
 import json
-import pathlib
 import requests
 import webbrowser
 import subprocess
 from win10toast_click import ToastNotifier
 
-from scrape import *
+from scrape.scrape import *
 
 PATH = "https://timesofindia.indiatimes.com/"
 toaster = ToastNotifier()
@@ -27,42 +27,37 @@ def link(url):
         pass
 
 def notif(title, url):
+    fpath = os.path.abspath(os.path.join(os.path.dirname(__file__), 'assets/icon.ico'))
     toaster.show_toast(
         title, "Click to read more",
         duration = 5,
         threaded = True,
+        icon_path = fpath,
         callback_on_click = lambda: link(url)
     )
 
-def explorer():
-    dirname = pathlib.Path(__file__).parent.resolve()
-    subprocess.Popen(f'explorer {dirname}')
-
 def prompt():
-    toaster.show_toast(
-        "To configure, first open config.exe",
-        "Simply double click on config.exe",
-        duration = 20,
-        threaded = True,
-        callback_on_click = explorer()
-    )
+    fpath = os.path.abspath(os.path.join(os.path.dirname(__file__), 'scrape/config.exe'))
+    subprocess.run(fpath)
 
 def main():
     try:
-        with open('user.json', 'r') as f:
+        fpath = os.path.abspath(os.path.join(os.path.dirname(__file__), 'scrape/user.json'))
+        with open(fpath, 'r') as f:
             data = json.load(f)
             if len(data["heads"]) == 0:
                 raise Exception
     except:
         prompt()
     else:
-        with open('user.json', 'r') as f:
+        fpath = os.path.abspath(os.path.join(os.path.dirname(__file__), 'scrape/user.json'))
+        with open(fpath, 'r') as f:
             data = json.load(f)
             final.update(stories('headlines', PATH))
-            
+
             for i in data['heads'].keys():
                 final.update(stories(i, data['heads'][i]))
-        
+
         for i in final:
             notif(i, final[i])
             time.sleep(data['gap']*60)
@@ -72,3 +67,4 @@ if __name__ == '__main__':
         main()
     except:
         print('Something went wrong')
+        input('Press enter to exit')
