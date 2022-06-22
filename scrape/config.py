@@ -1,4 +1,5 @@
 import os
+import sys
 import bs4
 import lxml
 import json
@@ -27,8 +28,16 @@ def sections():
     return web
 
 def prompt():
-    fpath = os.path.abspath(os.path.join(os.path.dirname(__file__), 'user.json'))
-    with open(fpath, 'w') as f:
+    try:
+        pth = sys.argv[1]
+    except:
+        if getattr(sys, 'frozen', False):
+            application_path = sys.executable
+        else:
+            application_path = os.path.dirname(os.path.abspath(__file__))
+        pth = os.path.abspath(os.path.join(os.path.dirname(application_path), 'user.json'))
+
+    with open(pth, 'w') as f:
         heads = sections()
         hks = list(heads.keys())
         user = {"heads":{}, "gap":5}
