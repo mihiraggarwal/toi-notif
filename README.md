@@ -16,7 +16,7 @@ Even though lots of news providers exist, people are often particular about the 
 
 - The first time the laptop is booted after installation, a configuration window will pop up. This can also be done manually by launching `toi-notif.exe`.
 - Up to 4 sections can be chosen from each of which, notifications about the top 5 news articles will be displayed. The general headlines for the day will also be displayed.
-- The news will be displayed every time the laptop is booted after configuration.
+- The news will be displayed every time the laptop is booted after configuration. These will be displayed in the interval of time chosen by the user.
 - Clicking on the notification will open the official TOI article in the browser.
 - Optionally, though not recommended, `toi-notif.exe` can also be manually launched whenever news updates are to be received.
 - To reconfigure, simply launch `config.exe` located inside the `scrape` folder.
@@ -26,6 +26,8 @@ Even though lots of news providers exist, people are often particular about the 
 ![Click](assets/click.png)
 
 ## Demo video
+
+https://user-images.githubusercontent.com/49950982/175776895-dc1ed038-cf39-4c51-982a-f7558191401d.mp4
 
 ## Troubleshooting
 
